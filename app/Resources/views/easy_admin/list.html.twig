@@ -1,0 +1,9 @@
+{% extends '@EasyAdmin/default/list.html.twig' %}
+
+{% block item_actions %}
+
+    {{ sonata_block_render_event('blog.comment', {'attr': {'entity' : item }}) }}
+
+    {{ parent() }}
+
+{% endblock %}

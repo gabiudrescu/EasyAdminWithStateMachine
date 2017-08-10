@@ -1,0 +1,14 @@
+{% set entity = settings.attr.entity %}
+
+{% if sm_possible_transitions(entity) is not empty %}
+<div class="btn-group">
+    <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+        Transitions <span class="caret"></span>
+    </button>
+    <ul class="dropdown-menu">
+        {% for transition in sm_possible_transitions(entity) %}
+            <li><a href="{{ path('apply_transition', {'entity' : entity.id, 'transition' : transition }) }}">{{ transition }}</a></li>
+        {% endfor %}
+    </ul>
+</div>
+{% endif %}

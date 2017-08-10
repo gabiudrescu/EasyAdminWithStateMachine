@@ -29,6 +29,13 @@ services:
         public: true
         tags: ['controller.service_arguments']
 
+    state_machine_transitions:
+            class: AppBundle\Blocks\BlockEventListener
+            arguments:
+                - '@@App/sm.html.twig'
+            tags:
+                - { name: kernel.event_listener, event: sonata.block.event.blog.comment, method: onBlockEvent }
+
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
     #     arguments:

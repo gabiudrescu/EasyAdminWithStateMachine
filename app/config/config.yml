@@ -12,7 +12,7 @@ winzou_state_machine:
     my_bundle_article:
         class: AppBundle\Entity\Post # class of your domain object
         property_path: status            # property of your object holding the actual state (default is "state")
-        graph: simple                   # name of the graph (default is "default")
+        # graph: simple                   # name of the graph (default is "default")
         # list of all possible states:
         states:
             - new
@@ -80,7 +80,7 @@ framework:
                     from: deleted
                     to: started
     #esi: ~
-    #translator: { fallbacks: ['%locale%'] }
+    translator: { fallbacks: ['%locale%'] }
     secret: '%secret%'
     router:
         resource: '%kernel.project_dir%/app/config/routing.yml'
@@ -137,3 +137,29 @@ swiftmailer:
     username: '%mailer_user%'
     password: '%mailer_password%'
     spool: { type: memory }
+
+easy_admin:
+    entities:
+        - AppBundle\Entity\Post
+
+sonata_block:
+    default_contexts: [sonata_page_bundle]
+    blocks:
+        sonata.admin.block.admin_list:
+            contexts:   [admin]
+
+        #sonata.admin_doctrine_orm.block.audit:
+        #    contexts:   [admin]
+
+        sonata.block.service.text:
+        sonata.block.service.rss:
+
+        # Some specific block from the SonataMediaBundle
+        #sonata.media.block.media:
+        #sonata.media.block.gallery:
+        #sonata.media.block.feature_media:
+
+        # Some block with different templates
+        #acme.demo.block.demo:
+        #    templates:
+        #       - { name: 'Simple', template: 'AcmeDemoBundle:Block:demo_simple.html.twig' }

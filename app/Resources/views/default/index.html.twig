@@ -49,15 +49,6 @@
                         How to create your first page in Symfony
                     </a>
                 </p>
-                <p>
-                    {{ dump(entity) }}
-                </p>
-                <p>Possible transitions:</p>
-                    {% for transition in sm_possible_transitions(entity, 'simple') %}
-                <p>
-                <a href="{{ path('homepage', {'transition' : transition}) }}">{{ transition }}</a>
-                </p>
-                    {% endfor %}
             </div>
 
         </div>

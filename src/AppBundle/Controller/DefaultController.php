@@ -14,32 +14,61 @@ class DefaultController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $post = $this->getDoctrine()->getRepository('AppBundle:Post')->find(1);
+        return $this->redirectToRoute('admin');
+    }
 
-        if  (!$post){
-            $post = new Post();
-            $post->setTitle('lorem ipsum');
-            $post->setBody('bla bla');
+    /**
+     * @Route("/apply_transition", name="apply_transition")
+     *
+     * @param Request $request
+     *
+     * @return \Symfony\Component\HttpFoundation\RedirectResponse
+     */
+    public function applyTransitionAction(Request $request)
+    {
+        $em = $this->getDoctrine()->getManager();
 
-            $this->getDoctrine()->getManager()->persist($post);
-            $this->getDoctrine()->getManager()->flush();
+        $repo = $em->getRepository('AppBundle:Post');
+
+        $entity = $repo->find($request->get('entity'));
+
+        if (!$entity) {
+            $this->addFlash('danger', sprintf('could not find entity %s', $request->get('entity')));
+
+            return $this->redirectToRoute('admin');
         }
 
         $factory = $this->get('sm.factory');
-        $postSM = $factory->get($post, 'simple');
+        $postSM = $factory->get($entity);
 
-        if ($transition = $request->get('transition')) {
-            if ($postSM->can($transition)) {
-                $postSM->apply($transition);
+        $initialStatus = $entity->getStatus();
 
-                $this->getDoctrine()->getManager()->flush($post);
-            }
+        if (!($transition = $request->get('transition'))) {
+            $this->addFlash('danger', sprintf('could not apply transition %s to entity %s',
+                $transition,
+                $entity->getId()
+            ));
+
+            return $this->redirectToRoute('admin');
         }
 
-        // replace this example code with whatever you need
-        return $this->render('default/index.html.twig', [
-            'base_dir' => realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR,
-            'entity' => $post,
-        ]);
+        if ($postSM->can($transition)) {
+            $postSM->apply($transition);
+
+            $this->getDoctrine()->getManager()->flush($entity);
+
+            $this->addFlash('success', sprintf('Successfully transitioned %s from %s to %s through %s',
+                    $entity->getId(),
+                    $initialStatus,
+                    $entity->getStatus(),
+                    $transition
+                ));
+
+            return $this->redirectToRoute('admin');
+        }
+
+        $this->addFlash('danger', 'there is no transition defined');
+
+        return $this->redirectToRoute('admin');
     }
 }
