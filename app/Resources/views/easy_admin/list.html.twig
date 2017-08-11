@@ -2,7 +2,7 @@
 
 {% block item_actions %}
 
-    {{ sonata_block_render_event('blog.comment', {'attr': {'entity' : item }}) }}
+    {{ sonata_block_render_event('state.machine', {'attr': {'entity' : item }}) }}
 
     {{ parent() }}
 

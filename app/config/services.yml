@@ -34,7 +34,7 @@ services:
             arguments:
                 - '@@App/sm.html.twig'
             tags:
-                - { name: kernel.event_listener, event: sonata.block.event.blog.comment, method: onBlockEvent }
+                - { name: kernel.event_listener, event: sonata.block.event.state.machine, method: onBlockEvent }
 
     # add more services, or override services that need manual wiring
     # AppBundle\Service\ExampleService:
